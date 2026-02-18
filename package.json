@@ -1,13 +1,13 @@
 {
-  "name": "vatican-confessional",
+  "name": "vatican-confessional-root",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "The Monorepo for the Vatican OS",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install-all": "npm install --prefix client && npm install --prefix server",
+    "dev": "echo \"Run client and server in separate terminals for best results.\""
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "keywords": ["vatican", "ledger", "strict-equality"],
+  "author": "Pope Francis Xavier I",
+  "license": "ISC"
 }
