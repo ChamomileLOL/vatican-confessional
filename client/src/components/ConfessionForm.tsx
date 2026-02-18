@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Purgatory, type PendingSin } from '../utils/Purgatory';
 
+// THE HOLY SWITCH: Use the environment variable if deployed, otherwise localhost
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 const ConfessionForm: React.FC = () => {
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState('');
@@ -10,7 +13,8 @@ const ConfessionForm: React.FC = () => {
     // 1. FETCH GLOBAL PENANCE (Read the Ledger)
     const fetchPenance = async () => {
         try {
-            const res = await fetch('http://localhost:3000/api/v1/vatican/archive');
+            // UPDATED: Now uses API_URL
+            const res = await fetch(`${API_URL}/api/v1/vatican/archive`);
             const data = await res.json();
             setGlobalDebt(data.totalDebt + " ETH");
         } catch (err) {
@@ -23,7 +27,7 @@ const ConfessionForm: React.FC = () => {
         fetchPenance();
     }, []);
 
-    // 2. THE RESURRECTION (Auto-Sync when Online) [cite: 159]
+    // 2. THE RESURRECTION (Auto-Sync when Online)
     useEffect(() => {
         const handleOnline = async () => {
             setStatus("Network Restored. Procession of Sins starting...");
@@ -34,7 +38,8 @@ const ConfessionForm: React.FC = () => {
             // Replay the Sins in Order
             for (const sin of queue) {
                 try {
-                    await fetch('http://localhost:3000/api/v1/vatican/confess', {
+                    // UPDATED: Now uses API_URL
+                    await fetch(`${API_URL}/api/v1/vatican/confess`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ 
@@ -65,7 +70,7 @@ const ConfessionForm: React.FC = () => {
     }, []);
 
 
-    // 3. THE INTERCEPTOR (Handle Submit) [cite: 123]
+    // 3. THE INTERCEPTOR (Handle Submit)
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!amount || !description) return;
@@ -74,7 +79,8 @@ const ConfessionForm: React.FC = () => {
 
         try {
             // ATTEMPT 1: Direct Connection
-            const res = await fetch('http://localhost:3000/api/v1/vatican/confess', {
+            // UPDATED: Now uses API_URL
+            const res = await fetch(`${API_URL}/api/v1/vatican/confess`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ description, amount }),
@@ -89,7 +95,7 @@ const ConfessionForm: React.FC = () => {
                 setStatus("Rejected: The sin format is heretical.");
             }
         } catch (err) {
-            // THE TRAP: Network Failure -> Send to Purgatory [cite: 143]
+            // THE TRAP: Network Failure -> Send to Purgatory
             console.log("Network unreachable. Entering Purgatory.");
             
             const pending: PendingSin = {
