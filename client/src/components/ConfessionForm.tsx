@@ -125,7 +125,7 @@ const ConfessionForm: React.FC = () => {
                 </button>
             </form>
 
-            [cite_start]{/* THE RESTORED UNDO BUTTON [cite: 12] */}
+            {/* THE RESTORED UNDO BUTTON */}
             <button 
                 onClick={handleUndo}
                 className="w-full mt-4 bg-transparent border border-red-900 text-red-500 text-xs py-2 uppercase tracking-widest hover:bg-red-900/20 transition-colors"
