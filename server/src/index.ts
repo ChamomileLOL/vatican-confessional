@@ -80,6 +80,25 @@ app.post('/api/v1/vatican/confess', async (req: any, res: any) => {
     }
 });
 
+// 3. UNDO (The Mercy of the Stack)
+// This removes the most recent sin from the database
+app.delete('/api/v1/vatican/undo', async (req: any, res: any) => {
+    try {
+        // Find the most recent sin (Sort by timestamp descending)
+        const lastSin = await Sin.findOne().sort({ timestamp: -1 });
+        
+        if (!lastSin) {
+             return res.status(404).json({ error: "No sins to absolve." });
+        }
+        
+        await Sin.findByIdAndDelete(lastSin._id);
+        console.log(`[UNDO] Reversed sin: ${lastSin.description}`);
+        res.json({ message: "Transgression reversed.", id: lastSin._id });
+    } catch (err) {
+        res.status(500).json({ error: "The ink is permanent. Could not undo." });
+    }
+});
+
 // START SERVER
 app.listen(PORT, () => {
     console.log(`[PONTIFEX] The Confessional is open on port ${PORT}`);
